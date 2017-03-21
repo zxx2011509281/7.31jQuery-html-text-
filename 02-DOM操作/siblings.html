@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+<div>
+	<p>pppp</p>
+	<span>span</span>
+	<h1>h1h1h1</h1>
+	<input type="text">
+
+</div>
+<script src="jq.js"></script>
+<script>
+jQuery.extend({
+	elementSiblings:function(sib){
+		var arr=[];
+		var parent=sib.parentNode;
+		var children=parent.childNodes;
+		children.forEach(function(v,i){
+			if(v.nodeType==1 && v!=sib){
+				arr.push(v);
+			}
+		})
+		return arr;
+	}
+})
+jQuery.fn.extend({
+	siblings:function(arg){
+	
+			var $1=jQuery();//定义一个jquey空对象
+			this.each(function(){
+			var arr=jQuery.elementSiblings(this);//获取当前Dom对象的所有兄弟元素
+			jQuery.merge($1,arr);
+			})
+			if(!arg) return $1;
+			var $2=jQuery();
+			var $arg=jQuery(arg);
+			var brr=[];
+			$1.each(function(){
+				var dom=this;
+				$arg.each(function(){
+					var domArg=this;
+					if(domArg==dom){
+						brr.push(dom);
+					}
+				})
+			})
+			return jQuery.merge($2,brr);
+	}
+})
+console.log($('input').siblings());
+console.log($('input').siblings('h1'));
+
+
+</script>
+	
+</body>
+</html>

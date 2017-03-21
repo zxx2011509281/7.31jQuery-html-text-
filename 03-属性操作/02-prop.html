@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+<div id="d1" checked="true">d1</div>
+<div id="d2">d2</div>
+<div id="d3">d3</div>
+<input type="checkBox">
+<script src="jq.js"></script>
+<script>
+jQuery.fn.extend({
+	prop:function(){
+		var len=arguments.length;
+		var arg0=arguments[0];
+		var arg1=arguments[1];
+		if(len==0)return this;
+		if(len==1){
+			if(jQuery.isString(arg0)){
+				var dom=this[0];//获取第一个dom元素；
+				return dom[arg0];
+			}else{
+				return this.each(function(){
+					var dom=this;
+					jQuery.each(arg0,function(propName,propValue){
+							dom[propName]=propValue;
+					})
+				})
+			}
+		}else{
+			return this.each(function(){
+				var dom=this;
+				dom[arg0]=arg1;
+			})
+		}
+	}
+})
+ 	$("div").prop("tag",100);
+    console.log($("input").prop("checked"));
+    $("input").prop({"checked":'true'});
+</script>
+	
+</body>
+</html>

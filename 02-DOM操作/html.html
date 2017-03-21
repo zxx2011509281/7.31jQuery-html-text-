@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+<div><span>span</span></div>
+<p></p>
+<div class="a">asd</div>
+<script src="jq.js"></script>
+<script>
+jQuery.fn.extend({
+	html:function(arg){
+		if(arguments[0]===undefined)return this[0].innerHTML;//没有参数或者参数为undefined，获取第一个元素的内容
+		return this.each(function(){
+			this.innerHTML=arg;
+		})
+
+	}
+
+
+})
+console.log($('div').html());
+$('.a').html('<input/>')
+
+</script>
+	
+</body>
+</html>

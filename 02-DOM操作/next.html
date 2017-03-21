@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+<div>
+	<input type="text">
+	<p>ppp</p>
+	<h1>h1</h1>
+
+</div><div>
+	<input type="text">
+	<p>ppp</p>
+	<h3>h1</h3>
+
+</div><div>
+	<input type="text">
+	<p>ppp</p>
+	<h5>h1</h5>
+
+</div>
+<script src="jq.js"></script>
+<script>
+jQuery.extend({
+	nextSibling:function(arg){
+		var next=arg.nextSibling;
+		if(next==null)return null;
+		if(next.nodeType==1)return next;
+		return jQuery.nextSibling(next);
+	}
+})
+jQuery.fn.extend({
+	next:function(arg){
+		var $1=jQuery();
+		var arr=[];
+		this.each(function(){
+			arr.push(jQuery.nextSibling(this));
+		})
+		jQuery.merge($1,arr);
+		if(!arg)return $1;
+
+		var $2=jQuery();
+		var brr=[];
+		$1.each(function(){
+			var dom=this;
+			jQuery(arg).each(function(){
+				if(dom==this){
+					brr.push(dom);
+				}
+			})
+		})
+		return jQuery.merge($2,brr);
+	}
+})
+console.log($('p').next());
+console.log($('p').next('h3'));
+</script>
+	
+</body>
+</html>

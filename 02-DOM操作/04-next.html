@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <span class="c">s1</span>
+    <input type="text" id="txtName"/>
+    <a href="" class="c">a1</a>
+</div>
+<div>
+    <span>s2</span>
+    <input type="text"/>
+    <a href="">a2</a>
+</div>
+<div>
+    <span>s3</span>
+    <input type="text"/>
+    <a href="">a3</a>
+</div>
+</body>
+<script src="jq.js"></script>
+<script>
+    jQuery.extend({
+        //找到该dom元素的下一个兄弟元素
+        //找不到返回null
+        nextElementSibling:function(dom){
+            //尝试找dom的下一个兄弟节点
+            //判断该节点是否是一个元素，如果是一个元素直接返回
+            //如果不是，应该查找下一个兄弟节点的下一个兄弟节点，继续以上过程
+            //......
+            //结束条件：1、找到  2、当前已经是最后一个兄弟节点了(dom.nextSibling=null)
+
+            var next=dom.nextSibling;
+
+            if(next==null) return null;
+
+            if(next.nodeType===1) return next;
+
+            return jQuery.nextElementSibling(dom.nextSibling);
+        }
+    });
+
+    var c=$(".c").get(0);
+    console.log($.nextElementSibling(c));//input
+    console.log($.nextElementSibling($("a.c").get(0)));//null
+
+    jQuery.fn.extend({
+        next:function(filter){
+            //要获取到每一个元素的下一个兄弟元素
+
+            var $next=jQuery();
+            var nexts=[];
+            this.each(function(){
+                var dom=this;
+
+                var nextElement=jQuery.nextElementSibling(dom);
+
+                nexts.push(nextElement);
+
+            });
+            //将nexts中的元素遍历追加到$next中
+            jQuery.merge($next,nexts);
+
+            if(!filter) return $next;
+
+            var arr2=[];//存放所有筛选后的元素
+            var $filter=jQuery(filter);
+            $next.each(function(){
+                var next=this;
+                $filter.each(function(){
+                    var filter=this;
+                    if(next==filter){
+                        arr2.push(next);
+                    }
+                })
+            });
+
+            return jQuery.merge(jQuery(),arr2);
+
+        }
+    })
+
+    console.log($("span").next())//3个input
+    console.log($("span").next("#txtName"))//id为txtName的input
+</script>
+</html>

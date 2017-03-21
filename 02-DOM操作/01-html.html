@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>d1 <span>s1</span></div>
+<div>d2</div>
+<div>d3</div>
+</body>
+<script src="jq.js"></script>
+<script>
+    jQuery.fn.extend({
+        html:function(arg){
+
+            if(arg===undefined){
+                //1、不传参、或者传递undefined-->这里使用arguments.length只能判断不传参的情况，不能处理undefined，应该获取第一个实参的值进行判断
+                return this.get(0).innerHTML;
+
+            }
+
+            //2、其他情况(包括null)--->设置所有元素的内容
+            return this.each(function(){
+                var dom=this;
+                dom.innerHTML=arg;
+            })
+
+
+
+        }
+    });
+
+    //获取第一个div的内容
+    console.log($("div").html());
+    console.log($("div").html(undefined));
+
+    var a;
+    console.log($("div").html(a));//a:undefined
+
+    console.log($("div").html(window.abc));//window.abc:undefined
+
+    //设置所有的div的指定内容
+    $("div").html(null);
+    $("div").html("");
+</script>
+</html>

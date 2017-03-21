@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <span class="c">s1</span>
+    <input type="text"/>
+    <a href="" class="c">a1</a>
+</div>
+<div>
+    <span>s2</span>
+    <input type="text"/>
+    <a href="">a2</a>
+</div>
+<div>
+    <span>s3</span>
+    <input type="text"/>
+    <a href="">a3</a>
+</div>
+
+</body>
+<script src="jq.js"></script>
+<script>
+    jQuery.extend({
+        //获取指定DOM元素的所有的兄弟元素
+        elementSiblings: function (dom) {
+            var result = [];
+
+            //1、找到父元素
+            var parent = dom.parentNode;
+            //2、找到父元素的所有的子节点
+            var children = parent.childNodes;
+            //3、过滤出元素节点，并过滤掉自己
+            for (var i = 0; i < children.length; i++) {
+                var child = children[i];
+                //如果是元素节点，并且不是本身，才是该DOM元素的兄弟元素
+                if (child.nodeType === 1 && child != dom) {
+                    result.push(child);
+                }
+
+            }
+            //4、返回结果
+            return result;
+        }
+    })
+
+
+    jQuery.fn.extend({
+        siblings: function (filter) {
+            var $siblings = jQuery();
+
+            //获取所有的当前DOM元素的所有的兄弟元素
+            this.each(function () {
+                var dom = this;
+                //要找到dom的所有兄弟元素，可以通过父元素的childNodes获取所有的子节点，再过滤出元素节点，再排除本身
+                var sibs = jQuery.elementSiblings(dom);
+
+                //将sibs中的元素遍历追加到$中
+                jQuery.merge($siblings, sibs);
+            });
+
+            if (!filter) {//filter是假值的情况，进入if-->filter为假值：不传参,""
+                return $siblings;
+            }
+
+            var $result = jQuery();
+            //进行筛选
+            var $filter = jQuery(filter);
+
+            var doms = [];//存放所有的筛选后的DOM元素
+            $siblings.each(function () {
+                var sibling = this;
+                $filter.each(function () {
+                    var filter = this;
+                    //如果sibling和filter相等，就是我们要获取的DOM元素，把它放到结果中
+                    if (sibling == filter) {
+                        doms.push(sibling);
+                    }
+                })
+            });
+            //将doms中的元素追加到$result中
+            return jQuery.merge($result, doms);
+        }
+    });
+
+    console.log($.elementSiblings($("div").get(0)));
+
+    console.log($("input").siblings());//获取所有的input标签的所有的兄弟元素
+
+
+    console.log($("input").siblings("a"));//获取所有的input标签的所有的兄弟元素中的a标签
+    console.log($("input").siblings(".c"));//获取所有的input标签的所有的兄弟元素中的a标签
+
+
+</script>
+</html>
